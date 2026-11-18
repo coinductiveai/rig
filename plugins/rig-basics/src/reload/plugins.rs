@@ -109,7 +109,7 @@ fn plugins(
     home: Option<Res<RigHome>>,
     invoked: Option<Res<Invoked>>,
     running: Query<&Name, With<PluginSource>>,
-    reloads: Option<Res<ReloadStatus>>,
+    slash_commands: Query<&Name, With<SlashCommand>>,
     mut commands: Commands,
     mut notices: MessageWriter<Notice>,
 ) {
@@ -176,7 +176,7 @@ fn plugins(
             ));
             return;
         }
-        let reload = Reload::here(reloads.is_some());
+        let reload = Reload::here(&slash_commands);
         ask(&mut commands, rows, on, args.agent, 0, reload);
         return;
     }
@@ -255,17 +255,19 @@ fn changed<'a>(rows: &'a [Row], on: &[bool]) -> Vec<(&'a Row, bool)> {
 /// Whether "Reload now" can run here, else why not.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 enum Reload {
-    /// `ReloadPlugin` is on and the launcher started rig.
+    /// `/reload` is a command and the launcher started rig.
     Can,
-    /// `ReloadPlugin` is off.
+    /// `/reload` is not a command: `ReloadPlugin` is off.
     NoPlugin,
     /// The launcher did not start rig.
     NoLauncher,
 }
 
 impl Reload {
-    /// Whether a reload can run, with `ReloadPlugin` on or not (`plugin`).
-    fn here(plugin: bool) -> Self {
+    /// Whether a reload can run, with `/reload` among `slash_commands` or
+    /// not.
+    fn here(slash_commands: &Query<&Name, With<SlashCommand>>) -> Self {
+        let plugin = slash_commands.iter().any(|name| name.as_str() == "/reload");
         match (plugin, harness_protocol::launcher().is_some()) {
             (false, _) => Reload::NoPlugin,
             (true, false) => Reload::NoLauncher,
@@ -552,7 +554,7 @@ fn leave(
         Option<&Ticked>,
         Option<&Highlighted>,
     )>,
-    reloads: Option<Res<ReloadStatus>>,
+    slash_commands: Query<&Name, With<SlashCommand>>,
     mut commands: Commands,
 ) {
     let Ok((list, shown, ticked, highlighted)) = lists.get(picked.entity) else {
@@ -568,7 +570,7 @@ fn leave(
         return;
     }
     let at = highlighted.map_or(shown.selected, |highlighted| highlighted.0);
-    let reload = Reload::here(reloads.is_some());
+    let reload = Reload::here(&slash_commands);
     ask(&mut commands, list.rows.clone(), on, list.agent, at, reload);
 }
 
