@@ -126,10 +126,11 @@ settings.toml names the app the sign-in pages return to.";
 which the last choice rewrites.";
             on rig_basics::sessions::SessionsPlugin, "rig-basics", "Sessions", Sessions, [], None,
                 "/new, /resume and /name.";
-            on rig_basics::sessions::agents::AgentsPlugin, "rig-basics",
+            off rig_basics::sessions::agents::AgentsPlugin, "rig-basics",
                 "Forks and rewind", Sessions, [], None,
-                "/fork, /agents and rewind (Alt+Up to an earlier message of yours, then Enter): \
-the agents of this session.";
+                "/fork and rewind (Alt+Up to an earlier message of yours, then Enter): a new agent \
+from the shown one, through the end or an earlier message. /agents comes with it, \
+to show the other agents.";
             on rig_basics::compaction::CompactionPlugin, "rig-basics",
                 "Compaction", Sessions, [], None,
                 "Summarizing a conversation near the context window, and /compact.";
@@ -138,7 +139,8 @@ the agents of this session.";
             on rig_traffic::TrafficPlugin, "rig-traffic", "Traffic log", Logs, [], None,
                 "With --traffic-log or [traffic] log = true, provider HTTP in traffic.jsonl.";
             on rig_basics::activity::ActivityPlugin, "rig-basics", "Activity", Views, [], None,
-                "What each agent is doing, for views.";
+                "What the agent is doing, in the status line: writing, the tool it runs or the \
+question it waits on, with the pulsing wave while it works.";
             on rig_basics::coding_tools::ReadTool, "rig-basics", "Read tool", Tools, [], None,
                 "The read tool.";
             on rig_basics::coding_tools::EditTool, "rig-basics", "Edit tool", Tools, [], None,
@@ -204,10 +206,10 @@ returns their final answers.";
 in settings.toml, and /budget.";
             off rig_basics::subagents::SubagentsPlugin, "rig-basics", "Subagents", Tools, [], None,
                 "Subagents: the task, message and wait tools, with which the agent starts other \
-agents, messages them and waits on their reports.";
+agents, messages them and waits on their reports, and /agents, to show one.";
             off rig_steel::SteelPlugin, "rig-steel", "Steel programs", Tools, [], None,
                 "The run_steel tool: one Scheme program that runs several agents and tool calls \
-and branches on their results.";
+and branches on their results, and /agents, to show them.";
             off rig_basics::telemetry::effect_log::EffectLogPlugin, "rig-basics",
                 "Effect log", Logs, [], None,
                 "The effect log: every model call, tool call and message, as a record in the \
