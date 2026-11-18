@@ -139,7 +139,7 @@ to show the other agents.";
             on rig_traffic::TrafficPlugin, "rig-traffic", "Traffic log", Logs, [], None,
                 "With --traffic-log or [traffic] log = true, provider HTTP in traffic.jsonl.";
             on rig_basics::activity::ActivityPlugin, "rig-basics", "Activity", Views, [], None,
-                "What the agent is doing, in the status line: writing, the tool it runs or the \
+                "What the agent is doing, in the status line: writing, running tools or the \
 question it waits on, with the pulsing wave while it works.";
             on rig_basics::coding_tools::ReadTool, "rig-basics", "Read tool", Tools, [], None,
                 "The read tool.";
